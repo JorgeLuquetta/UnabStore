@@ -8,7 +8,7 @@ import android.util.Patterns
 fun validateEmail(email: String): Pair <Boolean, String>{
     return when{
         email.isEmpty() -> Pair(false, "El correo es requerido.")
-        email.endsWith("@test.com") -> Pair(false, "Ese email no es corporativo")
+        !email.endsWith("@test.com") -> Pair(false, "Ese email no es corporativo")
         else -> Pair (true, "")
 
     }

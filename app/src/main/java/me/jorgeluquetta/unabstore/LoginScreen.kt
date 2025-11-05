@@ -174,7 +174,7 @@ fun LoginScreen(onClickRegister : ()-> Unit = {}, onSuccessfulLogin : ()-> Unit 
                     emailError = validateEmail(inputEmail).second
                     passwordError = validatePassword(inputPassword).second
 
-                    if (!isValidEmail && isValidPassword){
+                    if (isValidEmail && isValidPassword){
                         auth.signInWithEmailAndPassword(inputEmail, inputPassword)
                             .addOnCompleteListener(activity) { task ->
                                 if (task.isSuccessful){
