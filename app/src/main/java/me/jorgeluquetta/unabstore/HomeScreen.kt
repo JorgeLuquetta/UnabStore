@@ -1,6 +1,5 @@
 package me.jorgeluquetta.unabstore
 
-import android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,8 +17,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,11 +32,51 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
+
+
+data class Producto(
+
+    val nombre: String = "",
+    val cantidad: Int = 0,
+    val precio: Double = 0.0
+)
+
+@Composable
+fun FormularioAgregarProducto() {
+    val db = Firebase.firestore
+    var nombre by remember() { mutableStateOf("") }
+    var cantidad by remember { mutableStateOf("") }
+    var precio by remember { mutableStateOf("") }
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        TextField(value = nombre, onValueChange = { nombre = it }, label = { Text("Nombre") })
+        TextField(value = cantidad, onValueChange = { cantidad = it }, label = { Text("Cantidad") })
+        TextField(value = precio, onValueChange = { precio = it }, label = { Text("Precio") })
+
+        Button(onClick = {
+            val producto = hashMapOf(
+                "nombre" to nombre,
+                "cantidad" to cantidad.toInt(),
+                "precio" to precio.toDoubleOrNull()
+            )
+            db.collection("productos").add(producto).addOnSuccessListener {
+                nombre = ""
+                cantidad = ""
+                precio = ""
+                onProductoAgregado()
+            }
+        }) {
+            Text("Agregar Producto")
+        }
+    }
+}
 
 
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
 fun HomeScreen(onClickLogout: () -> Unit = {}) {
     val auth = Firebase.auth
     val user = auth.currentUser
@@ -67,7 +111,7 @@ fun HomeScreen(onClickLogout: () -> Unit = {}) {
         },
         bottomBar = {
         }
-    ) { paddingValues ->
+    ){ paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
