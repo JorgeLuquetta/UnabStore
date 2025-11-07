@@ -103,35 +103,28 @@ fun HomeScreen(onClickLogout: () -> Unit = {}) {
                 .background(Color(0xFFF5F5F5))
                 .padding(paddingValues)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("HOME SCREEN", fontSize = 30.sp)
-                if (user != null) {
-                    Text(user.email.toString())
-                } else {
-                    Text("No hay usuario")
-                }
-                Button(
-                    onClick = {
-                        auth.signOut()
-                        onClickLogout()
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFFF9900)
-                    )
-                ) {
-                    Text("Cerrar Sesión")
-                }
+            if (user != null) {
+                Text(
+                    text = "Bienvenido: ${user.email}",
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(16.dp)
+                )
             }
+
             // 🧾 Campos del formulario
             OutlinedTextField(
                 value = nombre,
                 onValueChange = { nombre = it },
                 label = { Text("Nombre del producto") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 4.dp)
+            )
+
+            OutlinedTextField(
+                value = descripcion,
+                onValueChange = { descripcion = it },
+                label = { Text("Descripción") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 4.dp)
