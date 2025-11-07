@@ -83,8 +83,11 @@ fun HomeScreen(onClickLogout: () -> Unit = {}) {
                     IconButton(onClick = { }) {
                         Icon(Icons.Filled.ShoppingCart, "Carrito")
                     }
-                    IconButton(onClick = { }) {
-                        Icon(Icons.AutoMirrored.Filled.ExitToApp, "Salida")
+                    IconButton(onClick = {
+                        auth.signOut()
+                        onClickLogout()
+                    }) {
+                        Icon(Icons.AutoMirrored.Filled.ExitToApp, "Cerrar sesión")
                     }
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
